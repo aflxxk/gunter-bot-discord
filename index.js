@@ -248,7 +248,7 @@ if (botChannelId && !adminCommands.includes(cmd) && message.channel.id !== botCh
       .setDescription(
         `**${message.author.username}** vs **${opponent.username}**\n\n` +
         `Resultado propuesto: **${kills}/${deaths}**\n\n` +
-        `${opponent}, confirma en **1 minuto**`
+        `${opponent}, confirma en **5 minuto**`
       );
 
     const row = new ActionRowBuilder().addComponents(
@@ -257,7 +257,7 @@ if (botChannelId && !adminCommands.includes(cmd) && message.channel.id !== botCh
     );
 
     const msg = await message.channel.send({ embeds: [embed], components: [row] });
-    const collector = msg.createMessageComponentCollector({ time: 60000 });
+    const collector = msg.createMessageComponentCollector({ time: 300000 });
 
     collector.on("collect", i => {
       if (i.user.id !== opponent.id) return i.reply({ content: "No puedes usar estos botones", ephemeral: true });
