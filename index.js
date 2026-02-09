@@ -24,11 +24,19 @@ const client = new Client({
 const PREFIX = "c!";
 const ITEMS_PER_PAGE = 5;
 const EMBED_COLOR = 0x00BFFF;
-const DATA_FILE = path.join(__dirname, "data.json");
+const DATA_DIR = path.join(__dirname, "data");
+const DATA_FILE = path.join(DATA_DIR, "data.json");
 
 // ================== DATA ==================
 function loadData() {
-  if (!fs.existsSync(DATA_FILE)) return {};
+  if (!fs.existsSync(DATA_DIR)) {
+    fs.mkdirSync(DATA_DIR, { recursive: true });
+  }
+
+  if (!fs.existsSync(DATA_FILE)) {
+    fs.writeFileSync(DATA_FILE, JSON.stringify({}, null, 2));
+  }
+
   return JSON.parse(fs.readFileSync(DATA_FILE, "utf8"));
 }
 
