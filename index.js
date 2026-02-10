@@ -21,7 +21,7 @@ const client = new Client({
   ]
 });
 
-const PREFIX = "c!";
+const PREFIX = process.env.PREFIX;
 const ITEMS_PER_PAGE = 5;
 const EMBED_COLOR = 0x00BFFF;
 const DATA_DIR = path.join(__dirname, "data");
@@ -120,12 +120,13 @@ function changeGunterState() {
 }
 
 changeGunterState();
-setInterval(changeGunterState, 600000);
+setInterval(changeGunterState, 3600000);
 
 // ================== READY ==================
+
 client.once("clientReady", () => {
   console.log(`✅ Bot conectado como ${client.user.tag}`);
-  client.user.setActivity('c!help', { type: ActivityType.Playing });
+  client.user.setActivity(`${PREFIX}help`, { type: ActivityType.Playing });
 });
 
 // ================== COMMANDS ==================
@@ -224,7 +225,7 @@ if (botChannelId && !adminCommands.includes(cmd) && message.channel.id !== botCh
     setTimeout(() => m.delete().catch(() => {}), 30000);
   }
 
-  // ================== c!pvp ==================
+  // ================== pvp ==================
   if (cmd === "pvp") {
     const opponent = message.mentions.users.first();
     const kills = parseInt(args[1], 10);
@@ -232,7 +233,7 @@ if (botChannelId && !adminCommands.includes(cmd) && message.channel.id !== botCh
 
     if (!opponent || !Number.isInteger(kills) || !Number.isInteger(deaths)) {
       const m = await message.channel.send({
-        embeds: [errorEmbed("Uso correcto: `c!pvp @oponente kills muertes`")]
+        embeds: [errorEmbed(`Uso correcto: "${PREFIX}pvp @oponente kills muertes"`)]
       });
       return setTimeout(() => m.delete().catch(() => {}), 5000);
     }
@@ -282,7 +283,7 @@ if (botChannelId && !adminCommands.includes(cmd) && message.channel.id !== botCh
     });
   }
 
-  // ================== c!undo ==================
+  // ================== undo ==================
   if (cmd === "undo") {
     const matches = data[guildId]?.users[authorId]?.matches ?? [];
     if (!matches.length) {
@@ -306,7 +307,7 @@ if (botChannelId && !adminCommands.includes(cmd) && message.channel.id !== botCh
     setTimeout(() => m.delete().catch(() => {}), 30000);
   }
 
-  // ================== c!stats ==================
+  // ================== stats ==================
   if (cmd === "stats") {
     const target = message.mentions.users.first() || message.author;
     const matches = data[guildId]?.users[target.id]?.matches ?? [];
@@ -335,7 +336,7 @@ if (botChannelId && !adminCommands.includes(cmd) && message.channel.id !== botCh
     setTimeout(() => m.delete().catch(() => {}), 60000);
   }
 
-// ================== c!history ==================
+// ================== history ==================
 if (cmd === "history") {
   // Usuario objetivo: mencionado o el que ejecuta el comando
   const target = message.mentions.users.first() || message.author;
@@ -387,7 +388,7 @@ if (cmd === "history") {
 }
 
 
-  // ================== c!vs ==================
+  // ================== vs ==================
   if (cmd === "vs") {
     const opponent = message.mentions.users.first();
     if (!opponent) {
@@ -428,7 +429,7 @@ if (cmd === "history") {
 
   }
 
-  // ================== c!ranking ==================
+  // ================== ranking ==================
   if (cmd === "ranking") {
     const users = data[guildId]?.users ?? {};
     const stats = Object.entries(users).map(([id, u]) => {
@@ -485,14 +486,14 @@ if (cmd === "history") {
      setTimeout(() => {msg.delete().catch(() => {}); }, 30000)
     }
 
-// ================== c!help ==================
+// ================== help ==================
 if (cmd === "help") {
   const helpEmbed = new EmbedBuilder()
     .setTitle("Comandos del Bot")
     .setColor(EMBED_COLOR)
     .addFields(
-      { name: "PvP", value: "`c!pvp @usuario kills muertes` — Registrar un PvP\n`c!undo` — Deshacer último registro en 2 minutos" },
-      { name: "Estadísticas", value: "`c!stats [@usuario]` — Ver tus stats o de otro usuario\n`c!history [@usuario]` — Ver historial de partidas\n`c!vs @usuario` — Ver partidas contra un usuario específico\n`c!ranking` — Ranking KB de todos los jugadores" }
+      { name: "PvP", value: `"${PREFIX}pvp @usuario kills muertes" — Registrar un PvP\n"${PREFIX}undo" — Deshacer último registro en 2 minutos` },
+      { name: "Estadísticas", value: `"${PREFIX}stats [@usuario]" — Ver tus stats o de otro usuario\n"${PREFIX}history [@usuario]" — Ver historial de partidas\n"${PREFIX}vs @usuario" — Ver partidas contra un usuario específico\n"${PREFIX}ranking" — Ranking KB de todos los jugadores` }
     )
     .setFooter({ text: "v1.0" });
 
