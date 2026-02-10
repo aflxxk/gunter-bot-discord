@@ -127,7 +127,14 @@ setInterval(changeGunterState, 3600000);
 
 client.once("clientReady", () => {
   console.log(`✅ Bot conectado como ${client.user.tag}`);
-  client.user.setActivity(actividadBot, { type: ActivityType.Playing });
+
+  if (actividadBot === "true") {
+    client.user.setActivity(`${process.env.PREFIX}help`, { type: ActivityType.Playing });
+  }
+  else if (actividadBot == "false") {
+    client.user.setActivity(`Inactivo`, { type: ActivityType.Playing });
+  }
+
 });
 
 // ================== COMMANDS ==================
