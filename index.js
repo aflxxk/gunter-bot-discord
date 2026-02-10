@@ -21,6 +21,7 @@ const client = new Client({
   ]
 });
 
+const actividadBot = process.env.ACTIVITYBOT
 const PREFIX = process.env.PREFIX;
 const ITEMS_PER_PAGE = 5;
 const EMBED_COLOR = 0x00BFFF;
@@ -126,7 +127,7 @@ setInterval(changeGunterState, 3600000);
 
 client.once("clientReady", () => {
   console.log(`✅ Bot conectado como ${client.user.tag}`);
-  client.user.setActivity(`${PREFIX}help`, { type: ActivityType.Playing });
+  client.user.setActivity(actividadBot, { type: ActivityType.Playing });
 });
 
 // ================== COMMANDS ==================
@@ -490,10 +491,11 @@ if (cmd === "history") {
 if (cmd === "help") {
   const helpEmbed = new EmbedBuilder()
     .setTitle("Comandos del Bot")
+    .setDescription(`debes usar ${PREFIX} antes de escribir cada comando`)
     .setColor(EMBED_COLOR)
     .addFields(
-      { name: "PvP", value: `"${PREFIX}pvp @usuario kills muertes" — Registrar un PvP\n"${PREFIX}undo" — Deshacer último registro en 2 minutos` },
-      { name: "Estadísticas", value: `"${PREFIX}stats [@usuario]" — Ver tus stats o de otro usuario\n"${PREFIX}history [@usuario]" — Ver historial de partidas\n"${PREFIX}vs @usuario" — Ver partidas contra un usuario específico\n"${PREFIX}ranking" — Ranking KB de todos los jugadores` }
+      { name: "PvP", value: "`pvp @usuario kills muertes` — Registrar un PvP\n`undo` — Deshacer último registro en 2 minutos" },
+      { name: "Estadísticas", value: "`stats [@usuario]` — Ver tus stats o de otro usuario\n`history [@usuario]` — Ver historial de partidas\n`vs @usuario` — Ver partidas contra un usuario específico\n`ranking` — Ranking KB de todos los jugadores" }
     )
     .setFooter({ text: "v1.0" });
 
